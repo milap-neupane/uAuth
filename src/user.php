@@ -3,13 +3,10 @@
   class User{
 
     # Method to get the user from the db
-    public function get_info(user_name, password){
-      $row = mysql_fetch_assoc(mysql_query("SELECT id,usr FROM members WHERE usr='{user_name}' AND pass='".md5(password)."'"));
-    }
-
-    #Method to create a new user
-    public function new(){
-
+    public function get_info($user_name, $password){
+      $query = "SELECT id, usr FROM members WHERE usr = '{$user_name}' AND pass = '".md5($password)."'";
+      $user_fetched = mysql_query($query);
+      $row = mysql_fetch_assoc($user_fetched);
     }
 
     #Method to logout the user
@@ -19,7 +16,10 @@
     }
 
     public function is_logged_in_without_remember(){
-      $_SESSION['id'] && !isset($_COOKIE['Remember']) && !$_SESSION['rememberMe']
+     if( isset($_SESSION['id']) && !isset($_COOKIE['Remember']) && !isset($_SESSION['rememberMe']) )
+      return true;
+    else
+      return false;
     }
 
     #Method to check if the user is exist in the system
